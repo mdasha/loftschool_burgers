@@ -35,24 +35,14 @@ if (!preg_match("|^[-0-9a-z_\.]+@[-0-9a-z_^\.]+\.[a-z]{2,6}$|i", $data['email'])
 // echo json_encode($data);
 
 //Подключаемся к базе данных Purchase
-function connection()
-{
-    $mysqli = mysqli_connect("localhost", "root", "", "Purchase");
-
-    /* проверяем соединение */
-    if (mysqli_connect_errno()) {
-        printf("Ошибка при соединении с базой данных: %s\n", mysqli_connect_error());
-        exit();
-    };
-    return $mysqli;
-};
+require_once('config.php');
 
 //Выбираем таблицу clients базы данных Purchase для клиентов с введенным email
 function clients()
 {
     $email = $_POST['email'];
     $polnijmassiv = [];
-    $sql = connection()->query("SELECT * FROM `clients` where `email` LIKE '$email' ");
+    $sql = connection()->query("SELECT * FROM `clients` where `email` = '$email' ");
 
 // Преобразуем полученные данные в двумерный массив
     $j = 0;
@@ -72,7 +62,7 @@ function orders()
 {
     $client_id = clients()[0][0];
     $polnijmassiv = [];
-    $sql = connection()->query("SELECT * FROM `orders` where `client_id` LIKE '$client_id' ");
+    $sql = connection()->query("SELECT * FROM `orders` where `client_id` = '$client_id' ");
 
 // Преобразуем полученные данные в двумерный массив
     $j = 0;
@@ -104,9 +94,9 @@ if (clients()[0][0]==0 and $data['email']<>"") {
         "','" . $data['payment'] . "','" . $data['card'] . "','" . $data['callback'] . "')");
 // Записываем данные о заказе в файл
 // Создаем папку с именем - временем отправки файла
-    $dir_name = date('d\-m\-Y\-H\-i\-s');
+    $dir_name = 'orders/';
     mkdir($dir_name, 0700);
-    $file = $dir_name.'/order.html';
+    $file = './orders/'.date('d\-m\-Y\-H-i\-s').'.html';
     $order = '<h1>Заказ №'.orders()[count(orders())-1][0].'</h1>';
     $order .= 'Ваш заказ будет доставлен по адресу: '.orders()[count(orders())-1][2];
     $order .= '<br>Ваш заказ: DarkBeefBurger за 500 рублей, 1 шт';

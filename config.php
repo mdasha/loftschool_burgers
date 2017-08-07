@@ -9,9 +9,9 @@ function connection()
 {
     $mysqli = mysqli_connect("localhost", "root", "", "Purchase");
 
-    /* проверяем соединение */
+    /* РїСЂРѕРІРµСЂСЏРµРј СЃРѕРµРґРёРЅРµРЅРёРµ */
     if (mysqli_connect_errno()) {
-        printf("Ошибка при соединении с базой данных: %s\n", mysqli_connect_error());
+        printf("РћС€РёР±РєР° РїСЂРё СЃРѕРµРґРёРЅРµРЅРёРё СЃ Р±Р°Р·РѕР№ РґР°РЅРЅС‹С…: %s\n", mysqli_connect_error());
         exit();
     };
     return $mysqli;

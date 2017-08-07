@@ -42,7 +42,8 @@ function clients()
 {
     $email = $_POST['email'];
     $polnijmassiv = [];
-    $sql = connection()->query("SELECT * FROM `clients` where `email` = '$email' ");
+    global $mysqli;
+    $sql = $mysqli->query("SELECT * FROM `clients` where `email` = '$email' ");
 
 // Преобразуем полученные данные в двумерный массив
     $j = 0;
@@ -62,7 +63,8 @@ function orders()
 {
     $client_id = clients()[0][0];
     $polnijmassiv = [];
-    $sql = connection()->query("SELECT * FROM `orders` where `client_id` = '$client_id' ");
+    global $mysqli;
+    $sql = $mysqli->query("SELECT * FROM `orders` where `client_id` = '$client_id' ");
 
 // Преобразуем полученные данные в двумерный массив
     $j = 0;
@@ -82,14 +84,15 @@ function orders()
 
 // Если записей с таким email нет, то записываем данные о пользователе
 if (clients()[0][0]==0 and $data['email']<>"") {
-        $result = connection()->query("INSERT INTO `clients` (`email`, `name`, `phone`) 
+    global $mysqli;
+        $result = $mysqli ->query("INSERT INTO `clients` (`email`, `name`, `phone`) 
                         VALUES ('".$_POST['email']."','".$_POST['name']."','".$_POST['phone']."')");
        // echo "Спасибо за регистрацию 2".$data['email']."Ваш id". clients()[0][0] ;
 } else {
   //  echo "<br>Вы уже зарегистрированы, ваш id: ". clients()[0][0];
 };
 // Вносим данные о заказе в таблицу с заказами  orders
-    $order = connection()->query("INSERT INTO `orders` (`client_id`, `address`, `comment`, `payment`,`card`,`recall`) 
+    $order = $mysqli ->query("INSERT INTO `orders` (`client_id`, `address`, `comment`, `payment`,`card`,`recall`) 
                         VALUES ('" . clients()[0][0] . "','" . $data['address'] . "','" . $data['comment'] .
         "','" . $data['payment'] . "','" . $data['card'] . "','" . $data['callback'] . "')");
 // Записываем данные о заказе в файл
